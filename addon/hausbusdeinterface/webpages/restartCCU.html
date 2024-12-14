@@ -1,0 +1,77 @@
+<html>
+<style>
+.aTable tbody td {
+	font-family: Calibri,Arial;
+	font-size: 120%;
+	color: #4b4b4b;
+}
+
+a:link {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:visited {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:hover {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+
+a:active {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+</style>
+<body onload=prepareRestart()>
+<table align=center width=90% class="aTable">
+<tr><td width=130><a href="/index"><img src="%IMG_ROOT%haus-bus-logo_klein_grau.jpg" border=0></a></td>
+    <td width=70></td>
+	<td valign=middle><b>Homematic Adminbereich</td>
+	<td width=40 align=center></td>
+</tr>
+<tr><td><br><br></td></tr>
+<tr><td colspan=10>Die Homematic CCU wird neu gestartet.<br>Die Seite wird automatisch neu geladen, wenn die CCU und das Haus-Bus Addon wieder verfügbar sind.<br>Bitte warten...<br><br><br><div style="display:inline" id="status"></div></td></tr>
+</table>
+
+<script>
+function prepareRestart()
+{
+  setTimeout(checkRestart, 10000);
+}
+
+function checkRestart()
+{
+  document.getElementById("status").innerHTML = "Prüfe Verbindung...";
+  
+  var request;
+  if(window.XMLHttpRequest) request = new XMLHttpRequest();
+  else request = new ActiveXObject("Microsoft.XMLHTTP");
+  
+  request.open('GET', 'http://%HOST%:8911/index', true);
+  request.onreadystatechange = function()
+  {
+    console.log("readyState = "+request.readyState+", status = "+request.status);
+    if (request.readyState === 4)
+    {
+      if (request.status === 200)
+      {
+        document.getElementById("status").innerHTML = "OK";
+        document.location.href = "/index";
+      } 
+      else 
+      {
+          document.getElementById("status").innerHTML = "Noch nicht wieder verfügbar... Warten....";
+		  setTimeout(checkRestart, 5000);
+      } 
+    }
+  };
+  request.send();
+}
+
+</script>
+</body>
+</html>

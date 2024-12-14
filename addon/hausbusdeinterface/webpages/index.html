@@ -1,0 +1,63 @@
+<html>
+<style>
+.aTable tbody td {
+	font-family: Calibri,Arial;
+	font-size: 120%;
+	color: #4b4b4b;
+}
+
+a:link {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:visited {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:hover {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+
+a:active {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+</style>
+<body>
+<form action="index"><input type=hidden name=submitted value=1>
+<table align=center width=90% class="aTable">
+<tr><td width=130><img src="%IMG_ROOT%haus-bus-logo_klein_grau.jpg"></td>
+    <td width=70></td>
+	<td valign=middle><b>Homematic Adminbereich<br><font size=2>%VERSION%</font></td>
+	<td width=40 align=center valign=top><a href="searchDevices"><img src="%IMG_ROOT%search.png" border=0></a><br><font size=2>Ger&auml;tesuche</td>
+	<td width=10 align=center></td>
+	<!--td width=40 align=center  valign=top><a href="resetCache"><img src="%IMG_ROOT%clear.jpg" border=0></a><br><font size=2>Ger&auml;tecache zur&uuml;cksetzen</td>
+	<td width=10 align=center></td-->
+	<td width=40 align=center  valign=top><a href="restart"><img src="%IMG_ROOT%restart.png" border=0></a><br><font size=2>Addon Restart</td>
+	<td width=10 align=center></td>
+	<td width=40 align=center  valign=top><a href="restartCCU"><img src="%IMG_ROOT%restart.png" border=0></a><br><font size=2>CCU Restart</td>
+</tr>
+<tr><td><br><br></td></tr>
+<tr><td align=right valign=middle>Status:</td><td></td><td valign=middle>%STATUS%</td></tr>
+<tr><td><br></td></tr>
+<tr><td align=right valign=top>Updates:</td><td></td><td>%UPDATES%</td></tr>
+<tr><td><br></td></tr>
+<tr><td align=right valign=top>Konfigurationen:</td><td></td>
+<td><select name=logging onchange=document.forms[0].submit() >%LOGGING%</select><br><br>
+<table cellspacing=0 cellpadding=0 border=0>
+<tr><td valign=middle><input type=type name="bridgeIp" value="%BRIDGE_IP%" size=12> <input type=submit value="Setzen" style="width:60px"></td>
+<td>&nbsp; <font size=2>IP vom Br&uuml;ckenmodul<br>&nbsp; (Nur notwendig innerhalb von Homeassistant)</font></td>
+</tr></table><br>
+<input type=text name=patch size=12> <input type=submit value="Patch" style="width:60px"> &nbsp;<font size=2>(Nur ausf&uuml;hren, falls vom Support beauftragt)</font>
+</td></tr>
+<tr><td><br></td></tr>
+<tr><td align=right valign=top>Support:</td><td></td><td><a href="support">Probleme? Hier melden und Hilfe bekommen!</a></td></tr>
+<tr><td><br></td></tr>
+<tr><td align=right valign=top>%NEWS%</td><td></td><td>%THE_NEWS%</td></tr>
+</table>
+</form>
+</body>
+</html>

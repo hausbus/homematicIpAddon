@@ -1,0 +1,7 @@
+rm -R addonUpdate
+mkdir addonUpdate
+cd addonUpdate
+wget -O update.tar.gz http://www.haus-bus.de/homematicip/downloadAddon.php
+gzip -d update.tar.gz
+tar -xf update.tar
+./update_script

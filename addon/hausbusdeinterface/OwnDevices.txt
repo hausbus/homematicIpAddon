@@ -1,0 +1,44 @@
+#
+# In dieser Datei können eigene DeviceIDs mit Namen versehen und protected werden,
+# so dass sie auf keinen Fall automatisch umkonfiguriert oder aktualisiert werden können.
+# Die Datei muss Ansi kodiert bleiben
+# Syntax DeviceId,Name, Protected [true,false]
+#
+9999,Raspberry,true
+110,C-Wemos 8-Fach Relais,true
+503,C-Flur,true
+1000,T-Eingang Elternschlafzimmer,true
+1541,C-Elternschlafzimmer I2C,true
+3422,Z-Bose Fernbedienung,true
+4000,C-Sonoff Marlons Treppe Bettlampe,true
+4001,C-Sonoff Marlons Treppe Lichterkette,true
+4002,C-Sonoff Herms Ecke Schreibtischlicht,true
+4003,C-Sonoff Klavierlicht,true
+4004,C-Sonoff 4-fach Relais Heizung 1,true
+4005,C-Sonoff 4-fach Relais Heizung 2,true
+4009,C-Wemos S0 Reader,true
+4096,T-Küchentresen,true
+5068,T-Wintergarten,true
+8192,T-Bett Tina,true
+8270,T-Eingang Wohnzimmer,true
+11581,C-Marlons Zimmer,true
+12222,Z-Raspberry,true
+12223,keine Ahnung,true
+12622,T-Taster Badezimmer,true
+13976,T-Bett Herm,true
+14896,C-Carolins Zimmer,true
+18343,T-Eingang Marlons Zimmer,true
+19075,T-Haustür,true
+20043,T-Wohnzimmer Herms Ecke,true
+21336,C-Küche,true
+22784,C-Herms Ecke,true
+22909,C-Eltern Schlafzimmer,true
+24261,C-Wintergarten,true
+25661,C-Badezimmer,true
+25874,T-Küche Kochinsel,true
+28900,T-Eingang Carolins Zimmer,true
+29725,C-Herms Ecke I2C,true
+3423,Sonoff,true
+4006,Sonoff,true
+4007,Sonoff,true
+4008,Sonoff,true

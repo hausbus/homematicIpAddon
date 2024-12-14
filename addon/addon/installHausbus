@@ -1,0 +1,647 @@
+#!/bin/sh
+
+mount -o remount,rw /
+
+#Aktuelle Patches durchfuehren
+/etc/config/addons/hausbusdeip/patch
+> /etc/config/addons/hausbusdeip/patch
+
+#Interface eintragen
+if [ $(cat /usr/local/etc/config/InterfacesList.xml | grep '<name>HausBusDe</name>' | wc -l ) -eq 0 ]
+then
+  echo "Updating InterfaceList.xml"
+  sed -i /usr/local/etc/config/InterfacesList.xml -e "s/<\/interfaces>/\t<ipc><name>HausBusDe<\/name><url>xmlrpc:\/\/127.0.0.1:8766<\/url><info>HausBusDe<\/info><\/ipc>\n<\/interfaces>/"
+fi
+
+#Startscript nach init.d
+cp /etc/config/addons/hausbusdeip/S60HausBusDeInterface /etc/init.d/
+chmod +x /etc/init.d/S60HausBusDeInterface
+#rm /etc/init.d/S60HausBusDeInterface
+
+file="/www/config/devdescr/DEVDB.tcl"
+
+# 6-fach-Taster
+if grep -q 6-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer 6-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {6-fach-Taster /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {6-fach-Taster 6-fach-Taster /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {6-fach-Taster {{50 \/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png} {250 \/config\/img\/devices\/250\/177_hbw-sd6-multikey.png}} /' $file
+ sed -i -e "s/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {6-fach-Taster {{\"1\" 0.045 0.140 0.025} {\"2\" 0.85 0.140 0.025} {\"3\" 0.045 0.476 0.025} {\"4\" 1 0.85 0.476 0.025} {\"5\" 1 0.045 0.809 0.025} {\"6\" 1 0.85 0.811 0.025} {\"7\" 1 0.35 0.138 0.02} {\"8\" 1 0.55 0.138 0.02} {\"9\" 1 0.35 0.474 0.02} {\"10\" 1 0.55 0.474 0.02} {\"11\" 1 0.35 0.809 0.02} {\"12\" 1 0.55 0.809 0.02} {\"13\" 3 0.23 0.37 'BL1' 0.2 'verdana' Font.BOLD} {\"14\" 3 0.24 0.37 'IN1' 0.2 'verdana' Font.BOLD} {\"15\" 3 0.24 0.37 'IN2' 0.2 'verdana' Font.BOLD} {\"16\" 3 0.24 0.37 'IN3' 0.2 'verdana' Font.BOLD} {\"17\" 3 0.24 0.37 'IN4' 0.2 'verdana' Font.BOLD} {\"18\" 3 0.17 0.37 'OUT1' 0.2 'verdana' Font.BOLD} {\"19\" 3 0.17 0.37 'OUT2' 0.2 'verdana' Font.BOLD} {\"20\" 3 0.17 0.37 'OUT3' 0.2 'verdana' Font.BOLD} {\"21\" 3 0.17 0.37 'OUT4' 0.2 'verdana' Font.BOLD} {\"22\" 3 0.32 0.37 '%' 0.2 'verdana' Font.BOLD} {\"23\" 3 0.23 0.37 'LUX' 0.2 'verdana' Font.BOLD} {\"24\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"25\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"26\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"27\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"28\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"29\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD}} /" $file
+ echo "$file erfolgreich fuer 6-fach-Taster angepasst";
+fi
+
+# 2-fach-Taster
+if grep -q 2-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer 2-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {2-fach-Taster /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {2-fach-Taster 2-fach-Taster /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {2-fach-Taster {{50 \/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png} {250 \/config\/img\/devices\/250\/177_hbw-sd6-multikey.png}} /' $file
+ sed -i -e "s/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {2-fach-Taster {{\"1\" 0.045 0.140 0.025} {\"2\" 0.85 0.140 0.025} {\"3\" 0.045 0.476 0.025} {\"4\" 1 0.85 0.476 0.025} {\"5\" 1 0.045 0.809 0.025} {\"6\" 1 0.85 0.811 0.025} {\"7\" 1 0.35 0.138 0.02} {\"8\" 1 0.55 0.138 0.02} {\"9\" 1 0.35 0.474 0.02} {\"10\" 1 0.55 0.474 0.02} {\"11\" 1 0.35 0.809 0.02} {\"12\" 1 0.55 0.809 0.02} {\"13\" 3 0.23 0.37 'BL1' 0.2 'verdana' Font.BOLD} {\"14\" 3 0.24 0.37 'IN1' 0.2 'verdana' Font.BOLD} {\"15\" 3 0.24 0.37 'IN2' 0.2 'verdana' Font.BOLD} {\"16\" 3 0.24 0.37 'IN3' 0.2 'verdana' Font.BOLD} {\"17\" 3 0.24 0.37 'IN4' 0.2 'verdana' Font.BOLD} {\"18\" 3 0.17 0.37 'OUT1' 0.2 'verdana' Font.BOLD} {\"19\" 3 0.17 0.37 'OUT2' 0.2 'verdana' Font.BOLD} {\"20\" 3 0.17 0.37 'OUT3' 0.2 'verdana' Font.BOLD} {\"21\" 3 0.17 0.37 'OUT4' 0.2 'verdana' Font.BOLD} {\"22\" 3 0.32 0.37 '%' 0.2 'verdana' Font.BOLD} {\"23\" 3 0.23 0.37 'LUX' 0.2 'verdana' Font.BOLD} {\"24\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"25\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"26\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"27\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"28\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"29\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD}} /" $file
+ echo "$file erfolgreich fuer 2-fach-Taster angepasst";
+fi
+
+# 4-fach-Taster
+if grep -q 4-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer 4-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {4-fach-Taster /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {4-fach-Taster 4-fach-Taster /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {4-fach-Taster {{50 \/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png} {250 \/config\/img\/devices\/250\/177_hbw-sd6-multikey.png}} /' $file
+ sed -i -e "s/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {4-fach-Taster {{\"1\" 0.045 0.140 0.025} {\"2\" 0.85 0.140 0.025} {\"3\" 0.045 0.476 0.025} {\"4\" 1 0.85 0.476 0.025} {\"5\" 1 0.045 0.809 0.025} {\"6\" 1 0.85 0.811 0.025} {\"7\" 1 0.35 0.138 0.02} {\"8\" 1 0.55 0.138 0.02} {\"9\" 1 0.35 0.474 0.02} {\"10\" 1 0.55 0.474 0.02} {\"11\" 1 0.35 0.809 0.02} {\"12\" 1 0.55 0.809 0.02} {\"13\" 3 0.23 0.37 'BL1' 0.2 'verdana' Font.BOLD} {\"14\" 3 0.24 0.37 'IN1' 0.2 'verdana' Font.BOLD} {\"15\" 3 0.24 0.37 'IN2' 0.2 'verdana' Font.BOLD} {\"16\" 3 0.24 0.37 'IN3' 0.2 'verdana' Font.BOLD} {\"17\" 3 0.24 0.37 'IN4' 0.2 'verdana' Font.BOLD} {\"18\" 3 0.17 0.37 'OUT1' 0.2 'verdana' Font.BOLD} {\"19\" 3 0.17 0.37 'OUT2' 0.2 'verdana' Font.BOLD} {\"20\" 3 0.17 0.37 'OUT3' 0.2 'verdana' Font.BOLD} {\"21\" 3 0.17 0.37 'OUT4' 0.2 'verdana' Font.BOLD} {\"22\" 3 0.32 0.37 '%' 0.2 'verdana' Font.BOLD} {\"23\" 3 0.23 0.37 'LUX' 0.2 'verdana' Font.BOLD} {\"24\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"25\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"26\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"27\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"28\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"29\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD}} /" $file
+ echo "$file erfolgreich fuer 4-fach-Taster angepasst";
+fi
+
+# 6-fach-Taster-Gira
+if grep -q 6-fach-Taster-Gira "$file"; then
+   echo "$file ist schon fuer 6-fach-Taster-Gira konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {6-fach-Taster-Gira /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {6-fach-Taster-Gira 6-fach-Taster-Gira /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {6-fach-Taster-Gira {{50 \/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png} {250 \/config\/img\/devices\/250\/177_hbw-sd6-multikey.png}} /' $file
+ sed -i -e "s/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {6-fach-Taster-Gira {{\"1\" 0.045 0.140 0.025} {\"2\" 0.85 0.140 0.025} {\"3\" 0.045 0.476 0.025} {\"4\" 1 0.85 0.476 0.025} {\"5\" 1 0.045 0.809 0.025} {\"6\" 1 0.85 0.811 0.025} {\"7\" 1 0.35 0.138 0.02} {\"8\" 1 0.55 0.138 0.02} {\"9\" 1 0.35 0.474 0.02} {\"10\" 1 0.55 0.474 0.02} {\"11\" 1 0.35 0.809 0.02} {\"12\" 1 0.55 0.809 0.02} {\"13\" 3 0.23 0.37 'BL1' 0.2 'verdana' Font.BOLD} {\"14\" 3 0.23 0.37 'BL2' 0.2 'verdana' Font.BOLD} {\"15\" 3 0.24 0.37 'IN1' 0.2 'verdana' Font.BOLD} {\"16\" 3 0.24 0.37 'IN2' 0.2 'verdana' Font.BOLD} {\"17\" 3 0.24 0.37 'IN3' 0.2 'verdana' Font.BOLD} {\"18\" 3 0.24 0.37 'IN4' 0.2 'verdana' Font.BOLD} {\"19\" 3 0.17 0.37 'OUT1' 0.2 'verdana' Font.BOLD} {\"20\" 3 0.17 0.37 'OUT2' 0.2 'verdana' Font.BOLD} {\"21\" 3 0.17 0.37 'OUT3' 0.2 'verdana' Font.BOLD} {\"22\" 3 0.17 0.37 'OUT4' 0.2 'verdana' Font.BOLD} {\"23\" 3 0.32 0.37 '%' 0.2 'verdana' Font.BOLD} {\"24\" 3 0.23 0.37 'LUX' 0.2 'verdana' Font.BOLD} {\"25\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"26\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"27\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"28\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"29\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD} {\"30\" 3 0.31 0.37 '°C' 0.2 'verdana' Font.BOLD}} /" $file
+ echo "$file erfolgreich fuer 6-fach-Taster-Gira angepasst";
+fi
+
+# 16-fach-Relais
+if grep -q 16-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 16-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {16-fach-Relais /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {16-fach-Relais 16-fach-Relais /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {16-fach-Relais {{50 \/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png} {250 \/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {16-fach-Relais {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 16-fach-Relais angepasst";
+fi
+
+# 12-fach-Relais
+if grep -q 12-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 12-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {12-fach-Relais /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {12-fach-Relais 12-fach-Relais /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {12-fach-Relais {{50 \/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png} {250 \/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {12-fach-Relais {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 12-fach-Relais angepasst";
+fi
+
+# 8-fach-Rollladen
+if grep -q 8-fach-Rollladen "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Rollladen konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {8-fach-Rollladen /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {8-fach-Rollladen 8-fach-Rollladen /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {8-fach-Rollladen {{50 \/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png} {250 \/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {8-fach-Rollladen {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Rollladen angepasst";
+fi
+
+# 8-fach-Rollos
+if grep -q 8-fach-Rollos "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Rollos konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {8-fach-Rollos /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {8-fach-Rollos 8-fach-Rollos /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {8-fach-Rollos {{50 \/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png} {250 \/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {8-fach-Rollos {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Rollos angepasst";
+fi
+
+# 8-fach-Relais
+if grep -q 8-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {8-fach-Relais /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {8-fach-Relais 8-fach-Relais /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {8-fach-Relais {{50 \/config\/img\/devices\/50\/186_hbw-lc-sw8-dr_thumb.png} {250 \/config\/img\/devices\/250\/186_hbw-lc-sw8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {8-fach-Relais {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Relais angepasst";
+fi
+
+# 8-fach-Motormodul
+if grep -q 8-fach-Motormodul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Motormodul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {8-fach-Motormodul /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {8-fach-Motormodul 8-fach-Motormodul /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {8-fach-Motormodul {{50 \/config\/img\/devices\/50\/186_hbw-lc-sw8-dr_thumb.png} {250 \/config\/img\/devices\/250\/186_hbw-lc-sw8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {8-fach-Motormodul {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Motormodul angepasst";
+fi
+
+# 2-fach-RGB-Dimmer
+if grep -q 2-fach-RGB-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 2-fach-RGB-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {2-fach-RGB-Dimmer /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {2-fach-RGB-Dimmer 2-fach-RGB-Dimmer /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {2-fach-RGB-Dimmer {{50 \/config\/img\/devices\/50\/190_hbw-lc-rgbww-in6-dr_thumb.png} {250 \/config\/img\/devices\/250\/190_hbw-lc-rgbww-in6-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {2-fach-RGB-Dimmer {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 2-fach-RGB-Dimmer angepasst";
+fi
+
+# 6-fach-PWM-Modul
+if grep -q 6-fach-PWM-Modul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 6-fach-PWM-Modul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {6-fach-PWM-Modul /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {6-fach-PWM-Modul 6-fach-PWM-Modul /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {6-fach-PWM-Modul {{50 \/config\/img\/devices\/50\/190_hbw-lc-rgbww-in6-dr_thumb.png} {250 \/config\/img\/devices\/250\/190_hbw-lc-rgbww-in6-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {6-fach-PWM-Modul {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 6-fach-PWM-Modul angepasst";
+fi
+
+if grep -q 8-fach-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {8-fach-Dimmer /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {8-fach-Dimmer 8-fach-Dimmer /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {8-fach-Dimmer {{50 \/config\/img\/devices\/50\/184_hbw-lc-dim8-in8-dr_thumb.png} {250 \/config\/img\/devices\/250\/184_hbw-lc-dim8-in8-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {8-fach-Dimmer {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Dimmer angepasst";
+fi
+
+if grep -q 4-fach-1-10V-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 4-fach-1-10V-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {4-fach-1-10V-Dimmer /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {4-fach-1-10V-Dimmer 4-fach-1-10V-Dimmer /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {4-fach-1-10V-Dimmer {{50 \/config\/img\/devices\/50\/179_hbw-lc4-in4-dr_thumb.png} {250 \/config\/img\/devices\/250\/179_hbw-lc4-in4-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {4-fach-1-10V-Dimmer {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 4-fach-1-10V-Dimmer angepasst";
+fi
+
+if grep -q 4-fach-0-10V-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 4-fach-0-10V-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {4-fach-0-10V-Dimmer /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {4-fach-0-10V-Dimmer 4-fach-0-10V-Dimmer /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {4-fach-0-10V-Dimmer {{50 \/config\/img\/devices\/50\/179_hbw-lc4-in4-dr_thumb.png} {250 \/config\/img\/devices\/250\/179_hbw-lc4-in4-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {4-fach-0-10V-Dimmer {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 4-fach-0-10V-Dimmer angepasst";
+fi
+
+if grep -q 32-fach-IO-Modul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 32-fach-IO-Modul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi    
+ sed -i -e 's/DEV_LIST {/DEV_LIST {32-fach-IO-Modul /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {32-fach-IO-Modul 32-fach-IO-Modul /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {32-fach-IO-Modul {{50 \/config\/img\/devices\/50\/189_hbw-io32-1w-dr_thumb.png} {250 \/config\/img\/devices\/250\/189_hbw-io32-1w-dr.png}} /' $file
+ sed -i -e 's/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {32-fach-IO-Modul {} /' $file
+ echo "$file erfolgreich fuer Haus-Bus.de 32-fach-IO-Modul angepasst";
+fi
+
+if grep -q 22-fach-UP-IO "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 22-fach-UP-IO konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e 's/DEV_LIST {/DEV_LIST {22-fach-UP-IO /' $file
+ sed -i -e 's/DEV_DESCRIPTION {/DEV_DESCRIPTION {22-fach-UP-IO 22-fach-UP-IO /' $file
+ sed -i -e 's/DEV_PATHS       {/DEV_PATHS       {22-fach-UP-IO {{50 \/config\/img\/devices\/50\/178_hbw-io12-1w-up_thumb.png} {250 \/config\/img\/devices\/250\/178_hbw-io12-1w-up.png}} /' $file
+ sed -i -e "s/DEV_HIGHLIGHT   {/DEV_HIGHLIGHT   {22-fach-UP-IO {{\"1\" 1 0.77 0.31 0.025} {\"2\" 1 0.77 0.362 0.025} {\"3\" 1 0.77 0.423 0.025} {\"4\" 1 0.77 0.474 0.025} {\"5\" 1 0.77 0.57 0.025} {\"6\" 1 0.77 0.576 0.025} {\"7\" 1 0.77 0.607 0.025} {\"8\" 1 0.77 0.658 0.025} {\"9\" 1 0.608 0.78 0.025} {\"10\" 1 0557547 0.78 0.025} {\"11\" 1 0.506 0.78 0.025} {\"12\" 1 0.404 0.78 0.025} {\"13\" 1 0.353 0.78 0.025} {\"14\" 1 0.302 0.78 0.025} {\"15\" 1 0.251 0.78 0.025} {\"16\" 1 0.14 0.628 0.025} {\"17\" 1 0.14 0.577 0.025} {\"18\" 1 0.14 0.527 0.025} {\"19\" 1 0.14 0.486 0.025} {\"20\" 1 0.14 0.435 0.025} {\"21\" 1 0.14 0.394 0.025} {\"22\" 1 0.14 0.343 0.025} {\"23\" 1 0.455 0.77 0.025} {\"24\" 1 0.455 0.77 0.025} {\"25\" 1 0.455 0.77 0.025} {\"26\" 1 0.455 0.77 0.025} {\"27\" 1 0.455 0.77 0.025} } /" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 22-fach-UP-IO angepasst";
+fi
+
+file="/www/webui/webui.js"
+
+# 6-fach-Taster-Gira
+if grep -q 6-fach-Taster-Gira "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 6-fach-Taster-Gira"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('6-fach-Taster-Gira');\nDEV_DESCRIPTION[\"6-fach-Taster-Gira\"] = \"6-fach-Taster-Gira\";\nDEV_PATHS[\"6-fach-Taster-Gira\"] = new Object();\nDEV_PATHS[\"6-fach-Taster-Gira\"][\"50\"] = \"\/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png\";\nDEV_PATHS[\"6-fach-Taster-Gira\"][\"250\"] = \"\/config\/img\/devices\/250\/177_hbw-sd6-multikey.png\";\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"] = new Object();\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"1\"] = [1, 0.045, 0.140, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"2\"] = [1, 0.85, 0.140, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"3\"] = [1, 0.045, 0.476, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"4\"] = [1, 0.85, 0.476, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"5\"] = [1, 0.045, 0.811, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"6\"] = [1, 0.85	 , 0.811, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"7\"] = [1, 0.35, 0.138, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"8\"] = [1, 0.55, 0.138, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"9\"] = [1, 0.35, 0.474, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"10\"] = [1, 0.55, 0.474, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"11\"] = [1, 0.35, 0.809, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"12\"] = [1, 0.55, 0.809, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"13\"] = [3, 0.23, 0.37, 'BL1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"14\"] = [3, 0.23, 0.37, 'BL2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"15\"] = [3, 0.24, 0.37, 'IN1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"16\"] = [3, 0.24, 0.37, 'IN2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"17\"] = [3, 0.24, 0.37, 'IN3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"18\"] = [3, 0.24, 0.37, 'IN4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"19\"] = [3, 0.17, 0.37, 'OUT1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"20\"] = [3, 0.17, 0.37, 'OUT2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"21\"] = [3, 0.17, 0.37, 'OUT3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"22\"] = [3, 0.17, 0.37, 'OUT4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"23\"] = [3, 0.32, 0.37, '%', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"24\"] = [3, 0.23, 0.37, 'LUX', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"25\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"26\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"27\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"28\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"29\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster-Gira\"][\"30\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 6-fach-Taster-Gira angepasst";
+fi
+
+# 6-fach-Taster
+if grep -q 6-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 6-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('6-fach-Taster');\nDEV_DESCRIPTION[\"6-fach-Taster\"] = \"6-fach-Taster\";\nDEV_PATHS[\"6-fach-Taster\"] = new Object();\nDEV_PATHS[\"6-fach-Taster\"][\"50\"] = \"\/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png\";\nDEV_PATHS[\"6-fach-Taster\"][\"250\"] = \"\/config\/img\/devices\/250\/177_hbw-sd6-multikey.png\";\nDEV_HIGHLIGHT[\"6-fach-Taster\"] = new Object();\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"1\"] = [1, 0.045, 0.140, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"2\"] = [1, 0.85, 0.140, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"3\"] = [1, 0.045, 0.476, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"4\"] = [1, 0.85, 0.476, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"5\"] = [1, 0.045, 0.811, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"6\"] = [1, 0.85	 , 0.811, 0.025];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"7\"] = [1, 0.35, 0.138, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"8\"] = [1, 0.55, 0.138, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"9\"] = [1, 0.35, 0.474, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"10\"] = [1, 0.55, 0.474, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"11\"] = [1, 0.35, 0.809, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"12\"] = [1, 0.55, 0.809, 0.02];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"13\"] = [3, 0.23, 0.37, 'BL1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"14\"] = [3, 0.24, 0.37, 'IN1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"15\"] = [3, 0.24, 0.37, 'IN2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"16\"] = [3, 0.24, 0.37, 'IN3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"17\"] = [3, 0.24, 0.37, 'IN4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"18\"] = [3, 0.17, 0.37, 'OUT1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"19\"] = [3, 0.17, 0.37, 'OUT2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"20\"] = [3, 0.17, 0.37, 'OUT3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"21\"] = [3, 0.17, 0.37, 'OUT4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"22\"] = [3, 0.32, 0.37, '%', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"23\"] = [3, 0.23, 0.37, 'LUX', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"24\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"25\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"26\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"27\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"28\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"6-fach-Taster\"][\"29\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 6-fach-Taster angepasst";
+fi
+
+# 4-fach-Taster
+if grep -q 4-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 4-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('4-fach-Taster');\nDEV_DESCRIPTION[\"4-fach-Taster\"] = \"4-fach-Taster\";\nDEV_PATHS[\"4-fach-Taster\"] = new Object();\nDEV_PATHS[\"4-fach-Taster\"][\"50\"] = \"\/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png\";\nDEV_PATHS[\"4-fach-Taster\"][\"250\"] = \"\/config\/img\/devices\/250\/177_hbw-sd6-multikey.png\";\nDEV_HIGHLIGHT[\"4-fach-Taster\"] = new Object();\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"1\"] = [1, 0.045, 0.140, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"2\"] = [1, 0.85, 0.140, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"3\"] = [1, 0.045, 0.476, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"4\"] = [1, 0.85, 0.476, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"5\"] = [1, 0.045, 0.811, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"6\"] = [1, 0.85	 , 0.811, 0.025];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"7\"] = [1, 0.35, 0.138, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"8\"] = [1, 0.55, 0.138, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"9\"] = [1, 0.35, 0.474, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"10\"] = [1, 0.55, 0.474, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"11\"] = [1, 0.35, 0.809, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"12\"] = [1, 0.55, 0.809, 0.02];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"13\"] = [3, 0.23, 0.37, 'BL1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"14\"] = [3, 0.24, 0.37, 'IN1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"15\"] = [3, 0.24, 0.37, 'IN2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"16\"] = [3, 0.24, 0.37, 'IN3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"17\"] = [3, 0.24, 0.37, 'IN4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"18\"] = [3, 0.17, 0.37, 'OUT1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"19\"] = [3, 0.17, 0.37, 'OUT2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"20\"] = [3, 0.17, 0.37, 'OUT3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"21\"] = [3, 0.17, 0.37, 'OUT4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"22\"] = [3, 0.32, 0.37, '%', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"23\"] = [3, 0.23, 0.37, 'LUX', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"24\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"25\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"26\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"27\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"28\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"4-fach-Taster\"][\"29\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 4-fach-Taster angepasst";
+fi
+
+# 2-fach-Taster
+if grep -q 2-fach-Taster\" "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 2-fach-Taster konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('2-fach-Taster');\nDEV_DESCRIPTION[\"2-fach-Taster\"] = \"2-fach-Taster\";\nDEV_PATHS[\"2-fach-Taster\"] = new Object();\nDEV_PATHS[\"2-fach-Taster\"][\"50\"] = \"\/config\/img\/devices\/50\/177_hbw-sd6-multikey_thumb.png\";\nDEV_PATHS[\"2-fach-Taster\"][\"250\"] = \"\/config\/img\/devices\/250\/177_hbw-sd6-multikey.png\";\nDEV_HIGHLIGHT[\"2-fach-Taster\"] = new Object();\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"1\"] = [1, 0.045, 0.140, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"2\"] = [1, 0.85, 0.140, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"3\"] = [1, 0.045, 0.476, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"4\"] = [1, 0.85, 0.476, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"5\"] = [1, 0.045, 0.811, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"6\"] = [1, 0.85	 , 0.811, 0.025];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"7\"] = [1, 0.35, 0.138, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"8\"] = [1, 0.55, 0.138, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"9\"] = [1, 0.35, 0.474, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"10\"] = [1, 0.55, 0.474, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"11\"] = [1, 0.35, 0.809, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"12\"] = [1, 0.55, 0.809, 0.02];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"13\"] = [3, 0.23, 0.37, 'BL1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"14\"] = [3, 0.24, 0.37, 'IN1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"15\"] = [3, 0.24, 0.37, 'IN2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"16\"] = [3, 0.24, 0.37, 'IN3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"17\"] = [3, 0.24, 0.37, 'IN4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"18\"] = [3, 0.17, 0.37, 'OUT1', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"19\"] = [3, 0.17, 0.37, 'OUT2', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"20\"] = [3, 0.17, 0.37, 'OUT3', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"21\"] = [3, 0.17, 0.37, 'OUT4', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"22\"] = [3, 0.32, 0.37, '%', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"23\"] = [3, 0.23, 0.37, 'LUX', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"24\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"25\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"26\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"27\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"28\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_HIGHLIGHT[\"2-fach-Taster\"][\"29\"] = [3, 0.31, 0.37, '°C', 0.2, 'verdana', Font.BOLD];\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 2-fach-Taster angepasst";
+fi
+
+# 16-fach-Relais
+if grep -q 16-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 16-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('16-fach-Relais');\nDEV_DESCRIPTION[\"16-fach-Relais\"] = \"16-fach-Relais\";\nDEV_PATHS[\"16-fach-Relais\"] = new Object();\nDEV_PATHS[\"16-fach-Relais\"][\"50\"] = \"\/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png\";\nDEV_PATHS[\"16-fach-Relais\"][\"250\"] = \"\/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png\";\nDEV_HIGHLIGHT[\"16-fach-Relais\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 16-fach-Relais angepasst";
+fi
+
+# 12-fach-Relais
+if grep -q 12-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 12-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('12-fach-Relais');\nDEV_DESCRIPTION[\"12-fach-Relais\"] = \"12-fach-Relais\";\nDEV_PATHS[\"12-fach-Relais\"] = new Object();\nDEV_PATHS[\"12-fach-Relais\"][\"50\"] = \"\/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png\";\nDEV_PATHS[\"12-fach-Relais\"][\"250\"] = \"\/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png\";\nDEV_HIGHLIGHT[\"12-fach-Relais\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 12-fach-Relais angepasst";
+fi
+
+# 8-fach-Rollladen
+if grep -q 8-fach-Rollladen "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Rollladen konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('8-fach-Rollladen');\nDEV_DESCRIPTION[\"8-fach-Rollladen\"] = \"8-fach-Rollladen\";\nDEV_PATHS[\"8-fach-Rollladen\"] = new Object();\nDEV_PATHS[\"8-fach-Rollladen\"][\"50\"] = \"\/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png\";\nDEV_PATHS[\"8-fach-Rollladen\"][\"250\"] = \"\/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png\";\nDEV_HIGHLIGHT[\"8-fach-Rollladen\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Rollladen angepasst";
+fi
+
+# 8-fach-Rollos
+if grep -q 8-fach-Rollos "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Rollos konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('8-fach-Rollos');\nDEV_DESCRIPTION[\"8-fach-Rollos\"] = \"8-fach-Rollos\";\nDEV_PATHS[\"8-fach-Rollos\"] = new Object();\nDEV_PATHS[\"8-fach-Rollos\"][\"50\"] = \"\/config\/img\/devices\/50\/187_hbw-lc-sw16-in8-dr_thumb.png\";\nDEV_PATHS[\"8-fach-Rollos\"][\"250\"] = \"\/config\/img\/devices\/250\/187_hbw-lc-sw16-in8-dr.png\";\nDEV_HIGHLIGHT[\"8-fach-Rollos\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Rollos angepasst";
+fi
+
+if grep -q 8-fach-Relais "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Relais konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('8-fach-Relais');\nDEV_DESCRIPTION[\"8-fach-Relais\"] = \"8-fach-Relais\";\nDEV_PATHS[\"8-fach-Relais\"] = new Object();\nDEV_PATHS[\"8-fach-Relais\"][\"50\"] = \"\/config\/img\/devices\/50\/186_hbw-lc-sw8-dr_thumb.png\";\nDEV_PATHS[\"8-fach-Relais\"][\"250\"] = \"\/config\/img\/devices\/250\/186_hbw-lc-sw8-dr.png\";\nDEV_HIGHLIGHT[\"8-fach-Relais\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Relais angepasst";
+fi
+
+if grep -q 8-fach-Motormodul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Motormodul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('8-fach-Motormodul');\nDEV_DESCRIPTION[\"8-fach-Motormodul\"] = \"8-fach-Motormodul\";\nDEV_PATHS[\"8-fach-Motormodul\"] = new Object();\nDEV_PATHS[\"8-fach-Motormodul\"][\"50\"] = \"\/config\/img\/devices\/50\/186_hbw-lc-sw8-dr_thumb.png\";\nDEV_PATHS[\"8-fach-Motormodul\"][\"250\"] = \"\/config\/img\/devices\/250\/186_hbw-lc-sw8-dr.png\";\nDEV_HIGHLIGHT[\"8-fach-Motormodul\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Motormodul angepasst";
+fi
+
+# 2-fach-RGB_Dimmer
+if grep -q 2-fach-RGB-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 2-fach-RGB-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('2-fach-RGB-Dimmer');\nDEV_DESCRIPTION[\"2-fach-RGB-Dimmer\"] = \"2-fach-RGB-Dimmer\";\nDEV_PATHS[\"2-fach-RGB-Dimmer\"] = new Object();\nDEV_PATHS[\"2-fach-RGB-Dimmer\"][\"50\"] = \"\/config\/img\/devices\/50\/190_hbw-lc-rgbww-in6-dr_thumb.png\";\nDEV_PATHS[\"2-fach-RGB-Dimmer\"][\"250\"] = \"\/config\/img\/devices\/250\/190_hbw-lc-rgbww-in6-dr.png\";\nDEV_HIGHLIGHT[\"2-fach-RGB-Dimmer\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 2-fach-RGB-Dimmer angepasst";
+fi
+
+# 6-fach-PWM-Modul
+if grep -q 6-fach-PWM-Modul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 6-fach-PWM-Modul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('6-fach-PWM-Modul');\nDEV_DESCRIPTION[\"6-fach-PWM-Modul\"] = \"6-fach-PWM-Modul\";\nDEV_PATHS[\"6-fach-PWM-Modul\"] = new Object();\nDEV_PATHS[\"6-fach-PWM-Modul\"][\"50\"] = \"\/config\/img\/devices\/50\/190_hbw-lc-rgbww-in6-dr_thumb.png\";\nDEV_PATHS[\"6-fach-PWM-Modul\"][\"250\"] = \"\/config\/img\/devices\/250\/190_hbw-lc-rgbww-in6-dr.png\";\nDEV_HIGHLIGHT[\"6-fach-PWM-Modul\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 6-fach-PWM-Modul angepasst";
+fi
+
+if grep -q 8-fach-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 8-fach-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('8-fach-Dimmer');\nDEV_DESCRIPTION[\"8-fach-Dimmer\"] = \"8-fach-Dimmer\";\nDEV_PATHS[\"8-fach-Dimmer\"] = new Object();\nDEV_PATHS[\"8-fach-Dimmer\"][\"50\"] = \"\/config\/img\/devices\/50\/184_hbw-lc-dim8-in8-dr_thumb.png\";\nDEV_PATHS[\"8-fach-Dimmer\"][\"250\"] = \"\/config\/img\/devices\/250\/184_hbw-lc-dim8-in8-dr.png\";\nDEV_HIGHLIGHT[\"8-fach-Dimmer\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 8-fach-Dimmer angepasst";
+fi
+
+if grep -q 4-fach-1-10V-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 4-fach-1-10V-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('4-fach-1-10V-Dimmer');\nDEV_DESCRIPTION[\"4-fach-1-10V-Dimmer\"] = \"4-fach-1-10V-Dimmer\";\nDEV_PATHS[\"4-fach-1-10V-Dimmer\"] = new Object();\nDEV_PATHS[\"4-fach-1-10V-Dimmer\"][\"50\"] = \"\/config\/img\/devices\/50\/179_hbw-lc4-in4-dr_thumb.png\";\nDEV_PATHS[\"4-fach-1-10V-Dimmer\"][\"250\"] = \"\/config\/img\/devices\/250\/179_hbw-lc4-in4-dr.png\";\nDEV_HIGHLIGHT[\"4-fach-1-10V-Dimmer\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 4-fach-1-10V-Dimmer angepasst";
+fi
+
+if grep -q 4-fach-0-10V-Dimmer "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 4-fach-0-10V-Dimmer konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('4-fach-0-10V-Dimmer');\nDEV_DESCRIPTION[\"4-fach-0-10V-Dimmer\"] = \"4-fach-0-10V-Dimmer\";\nDEV_PATHS[\"4-fach-0-10V-Dimmer\"] = new Object();\nDEV_PATHS[\"4-fach-0-10V-Dimmer\"][\"50\"] = \"\/config\/img\/devices\/50\/179_hbw-lc4-in4-dr_thumb.png\";\nDEV_PATHS[\"4-fach-0-10V-Dimmer\"][\"250\"] = \"\/config\/img\/devices\/250\/179_hbw-lc4-in4-dr.png\";\nDEV_HIGHLIGHT[\"4-fach-0-10V-Dimmer\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 4-fach-0-10V-Dimmer angepasst";
+fi
+
+if grep -q 32-fach-IO-Modul "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 32-fach-IO-Modul konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi    
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('32-fach-IO-Modul');\nDEV_DESCRIPTION[\"32-fach-IO-Modul\"] = \"32-fach-IO-Modul\";\nDEV_PATHS[\"32-fach-IO-Modul\"] = new Object();\nDEV_PATHS[\"32-fach-IO-Modul\"][\"50\"] = \"\/config\/img\/devices\/50\/189_hbw-io32-1w-dr_thumb.png\";\nDEV_PATHS[\"32-fach-IO-Modul\"][\"250\"] = \"\/config\/img\/devices\/250\/189_hbw-io32-1w-dr.png\";\nDEV_HIGHLIGHT[\"32-fach-IO-Modul\"] = new Object();\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 32-fach-IO-Modul angepasst";
+fi
+
+if grep -q 22-fach-UP-IO "$file"; then
+   echo "$file ist schon fuer Haus-Bus.de 22-fach-UP-IO konfiguriert"
+else
+ if [ ! -f "$file.backup" ];
+ then
+  echo "Erstelle Backup: $file.backup";
+  cp $file $file.backup
+ else
+   echo "Backup existiert bereits: $file.backup";
+ fi
+ sed -i -e "s/DEV_LIST.push('HmIP-WRC6');/DEV_LIST.push('22-fach-UP-IO');\nDEV_DESCRIPTION[\"22-fach-UP-IO\"] = \"22-fach-UP-IO\";\nDEV_PATHS[\"22-fach-UP-IO\"] = new Object();\nDEV_PATHS[\"22-fach-UP-IO\"][\"50\"] = \"\/config\/img\/devices\/50\/178_hbw-io12-1w-up_thumb.png\";\nDEV_PATHS[\"22-fach-UP-IO\"][\"250\"] = \"\/config\/img\/devices\/250\/178_hbw-io12-1w-up.png\";\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"] = new Object();\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"1\"] = [1, 0.77, 0.31, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"2\"] = [1, 0.77, 0.362, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"3\"] = [1, 0.77, 0.423, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"4\"] = [1, 0.77, 0.474, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"5\"] = [1, 0.77, 0.525, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"6\"] = [1, 0.77, 0.576, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"7\"] = [1, 0.77, 0.607, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"8\"] = [1, 0.77, 0.658, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"9\"] = [1, 0.608, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"10\"] = [1, 0.557, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"11\"] = [1, 0.506, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"12\"] = [1, 0.404, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"13\"] = [1, 0.353, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"14\"] = [1, 0.302, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"15\"] = [1, 0.251, 0.78, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"16\"] = [1, 0.14, 0.628, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"17\"] = [1, 0.14, 0.577, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"18\"] = [1, 0.14, 0.527, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"19\"] = [1, 0.14, 0.486, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"20\"] = [1, 0.14, 0.435, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"21\"] = [1, 0.13, 0.394, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"22\"] = [1, 0.13, 0.343, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"23\"] = [1, 0.455, 0.77, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"24\"] = [1, 0.455, 0.77, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"25\"] = [1, 0.455, 0.77, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"26\"] = [1, 0.455, 0.77, 0.025];\nDEV_HIGHLIGHT[\"22-fach-UP-IO\"][\"27\"] = [1, 0.455, 0.77, 0.025];\nDEV_LIST.push('HmIP-WRC6');/" $file
+ echo "$file erfolgreich fuer Haus-Bus.de 22-fach-UP-IO angepasst";
+fi
+
+cp 177_hbw-sd6-multikey.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/177_hbw-sd6-multikey.png
+
+cp 177_hbw-sd6-multikey_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/177_hbw-sd6-multikey_thumb.png
+
+cp 178_hbw-io12-1w-up.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/178_hbw-io12-1w-up.png
+
+cp 178_hbw-io12-1w-up_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/178_hbw-io12-1w-up_thumb.png
+
+cp 179_hbw-lc4-in4-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/179_hbw-lc4-in4-dr_thumb.png
+
+cp 179_hbw-lc4-in4-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/179_hbw-lc4-in4-dr.png
+
+cp 183_hbw-lc-bl8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/183_hbw-lc-bl8-dr_thumb.png
+
+cp 183_hbw-lc-bl8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/183_hbw-lc-bl8-dr.png
+
+cp 184_hbw-lc-dim8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/184_hbw-lc-dim8-dr_thumb.png
+
+cp 184_hbw-lc-dim8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/184_hbw-lc-dim8-dr.png
+
+cp 184_hbw-lc-dim8-in8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/184_hbw-lc-dim8-in8-dr_thumb.png
+
+cp 184_hbw-lc-dim8-in8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/184_hbw-lc-dim8-in8-dr.png
+
+cp 185_hbw-lc-sw16-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/185_hbw-lc-sw16-dr_thumb.png
+
+cp 185_hbw-lc-sw16-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/185_hbw-lc-sw16-dr.png
+
+cp 186_hbw-lc-sw8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/186_hbw-lc-sw8-dr_thumb.png
+
+cp 186_hbw-lc-sw8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/186_hbw-lc-sw8-dr.png
+
+cp 187_hbw-lc-sw16-in8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/187_hbw-lc-sw16-in8-dr_thumb.png
+
+cp 187_hbw-lc-sw16-in8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/187_hbw-lc-sw16-in8-dr.png
+
+cp 188_hbw-lc-bl8-in8-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/188_hbw-lc-bl8-in8-dr_thumb.png
+
+cp 188_hbw-lc-bl8-in8-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/188_hbw-lc-bl8-in8-dr.png
+
+cp 189_hbw-io32-1w-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/189_hbw-io32-1w-dr_thumb.png
+
+cp 189_hbw-io32-1w-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/189_hbw-io32-1w-dr.png
+
+cp 190_hbw-lc-rgbww-in6-dr_thumb.png /www/config/img/devices/50/
+chmod 755 /www/config/img/devices/50/190_hbw-lc-rgbww-in6-dr_thumb.png
+
+cp 190_hbw-lc-rgbww-in6-dr.png /www/config/img/devices/250/
+chmod 755 /www/config/img/devices/250/190_hbw-lc-rgbww-in6-dr.png
+
+mount -o remount,ro /
+
