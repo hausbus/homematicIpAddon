@@ -1,0 +1,67 @@
+<html>
+<style>
+.aTable tbody td {
+	font-family: Calibri,Arial;
+	font-size: 120%;
+	color: #4b4b4b;
+}
+
+a:link {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:visited {
+  text-decoration: none;
+  color:#4b4b4b;
+}
+
+a:hover {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+
+a:active {
+  text-decoration: underline;
+  color:#4b4b4b;
+}
+</style>
+<body>
+<table align=center width=90% class="aTable">
+<tr><td width=130><a href="/index"><img src="%IMG_ROOT%haus-bus-logo_klein_grau.jpg" border=0></a></td>
+    <td width=70></td>
+	<td valign=middle><b>Homematic Adminbereich</td>
+	<td width=40 align=center></td>
+</tr>
+<tr><td><br><br></td></tr>
+<tr><td colspan=10>%MESSAGE% <div style="display:inline" id="countdown"></div><br><br><br>%STATUS%</td></tr>
+</table>
+<script>
+var startTimeMs = 0;
+
+function forwardMe()
+{
+  startTimeMs = (new Date()).getTime();
+  setTimeout(callBack_func, %FORWARD_TIME%);
+  updateRemainingTime()
+}
+
+function callBack_func()
+{
+  document.location.href = "%FORWARD_TARGET%";
+}
+
+function updateRemainingTime()
+{
+  var rest = %FORWARD_TIME% - ((new Date()).getTime() - startTimeMs);
+  if (rest<=0) rest=0;
+  else rest=Math.round(rest/1000);
+  
+  document.getElementById("countdown").innerHTML=rest;
+  setTimeout(updateRemainingTime, 1000);
+}
+
+forwardMe();
+</script>
+</body>
+</html>
